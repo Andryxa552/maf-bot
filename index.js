@@ -1,11 +1,15 @@
-const {token} = require('./config.json')
 const {Client, Intents} = require('discord.js');
 
 const express = require('express')
 
+const dotenv = require('dotenv');
+
 const app = express()
 const port = 3000
 
+dotenv.config()
+
+const {MyToken} = process.env
 
 const client = new Client({
     intents: [Intents.FLAGS.GUILDS,
@@ -75,7 +79,6 @@ client.on('voiceStateUpdate', async (oldState, newState) => {
     }
 
     if (newState.channelId !== id && oldState.channelId !== id) {
-        console.log('on from my sev')
         return
     }
 
@@ -100,4 +103,8 @@ app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
 
-client.login(token);
+if(MyToken){
+    client.login(MyToken);
+}else {
+    console.log('no token')
+}
